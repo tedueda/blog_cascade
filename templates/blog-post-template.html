@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}} - スタジオQ</title>
+    <meta name="description" content="{{meta_description}}">
+    <meta property="og:title" content="{{title}}">
+    <meta property="og:description" content="{{meta_description}}">
+    <meta property="og:image" content="{{featured_image}}">
+    <meta property="og:url" content="https://studioq.jp/blog/{{slug}}.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="スタジオQ">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .blog-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .blog-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            padding: 120px 20px 60px; /* 上部パディングを増やして下げる */
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 60px; /* メニューとの重なりを防ぐためにさらに下げる */
+        }
+        .blog-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.5) 100%);
+            z-index: 1;
+        }
+        .blog-title {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 2;
+            font-weight: 700;
+        }
+        .blog-meta {
+            color: #eee;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        .blog-meta span {
+            margin: 0 10px;
+        }
+        .blog-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .blog-body {
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        .blog-body h2 {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            position: relative;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #00ff9d;
+            color: #00ff9d; /* ネオングリーンに統一 */
+            text-shadow: 0 0 5px rgba(0, 255, 157, 0.5); /* 光るネオン効果 */
+            letter-spacing: 0.5px;
+        }
+        .blog-body p {
+            margin-bottom: 20px;
+        }
+        .blog-body img {
+            max-width: 100%;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        .section-image {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .section-image img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    {{structured_data}}
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="../index.html">
+                    <img src="../images/logo.png" alt="スタジオQ">
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">ホーム</a></li>
+                    <li><a href="../blog.html">ブログ</a></li>
+                    <li><a href="../contact.html">お問い合わせ</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="blog-content">
+            <article>
+                <div class="blog-header" id="blog-header">
+                    <h1 class="blog-title">{{title}}</h1>
+                    <div class="blog-meta">
+                        <span><i class="far fa-calendar-alt"></i> {{date}}</span>
+                        <span><i class="far fa-user"></i> {{author}}</span>
+                    </div>
+                </div>
+                
+                <script>
+                    // ヘッダー背景画像の設定
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const header = document.getElementById('blog-header');
+                        if (header) {
+                            header.style.backgroundImage = "url('{{image}}')";
+                        }
+                    });
+                </script>
+                
+                <div class="blog-body">
+                    {{content}}
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section about">
+                    <h3>スタジオQについて</h3>
+                    <p>最新の映像技術と創造的なアイデアで、あなたのビジョンを実現します。</p>
+                </div>
+                <div class="footer-section links">
+                    <h3>リンク</h3>
+                    <ul>
+                        <li><a href="../index.html">ホーム</a></li>
+                        <li><a href="../blog.html">ブログ</a></li>
+                        <li><a href="../contact.html">お問い合わせ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section contact">
+                    <h3>お問い合わせ</h3>
+                    <p><i class="fas fa-envelope"></i> info@studioq.jp</p>
+                    <p><i class="fas fa-phone"></i> 03-1234-5678</p>
+                    <div class="social">
+                        <a href="#" title="Facebookでフォロー"><i class="fab fa-facebook"></i></a>
+                        <a href="#" title="Twitterでフォロー"><i class="fab fa-twitter"></i></a>
+                        <a href="#" title="Instagramでフォロー"><i class="fab fa-instagram"></i></a>
+                        <a href="#" title="YouTubeでフォロー"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 スタジオQ All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

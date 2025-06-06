@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API設定 - スタジオQ</title>
+    <meta name="description" content="OpenAI API設定">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="blog-generator.css">
+    
+    <style>
+        .settings-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .settings-header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .settings-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .api-key-input {
+            position: relative;
+        }
+        
+        .toggle-visibility {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+        .status-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .back-link {
+            display: block;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .api-status-hidden {
+            display: none;
+        }
+        
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header>
+        <div class="logo">
+            <h1>スタジオQ</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">新規記事生成</a></li>
+                <li><a href="content-manager.html">記事管理</a></li>
+                <li><a href="archive.html">履歴</a></li>
+                <li><a href="api-settings.html">API 設定</a></li>
+            </ul>
+        </nav>
+        <div class="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="blog-generator-main">
+        <div class="container">
+            <div class="settings-container">
+                <div class="settings-header">
+                    <h1>OpenAI API設定</h1>
+                    <p>ブログ生成機能を使用するためのAPI設定を行います</p>
+                </div>
+                
+                <form id="api-settings-form" class="settings-form">
+                    <div class="form-group">
+                        <label for="openai-api-key">
+                            <i class="fas fa-key"></i>
+                            OpenAI APIキー
+                        </label>
+                        <div class="api-key-input">
+                            <input type="password" id="openai-api-key" name="apiKey" placeholder="sk-..." required>
+                            <button type="button" class="toggle-visibility" id="toggle-api-key" title="APIキーを表示/非表示">
+                                <i class="fas fa-eye" aria-hidden="true"></i>
+                                <span class="sr-only">APIキーを表示/非表示</span>
+                            </button>
+                        </div>
+                        <small class="form-help">OpenAIのAPIキーを入力してください。ローカルストレージに保存され、サーバーには送信されません。</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="openai-model">
+                            <i class="fas fa-robot"></i>
+                            使用モデル
+                        </label>
+                        <select id="openai-model" name="model">
+                            <option value="gpt-4o">GPT-4o（推奨）</option>
+                            <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo（高速・低コスト）</option>
+                        </select>
+                        <small class="form-help">使用するOpenAIのモデルを選択してください</small>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            設定を保存
+                        </button>
+                        <button type="button" id="test-api" class="btn btn-secondary">
+                            <i class="fas fa-vial"></i>
+                            API接続テスト
+                        </button>
+                    </div>
+                </form>
+                
+                <div id="api-status" class="api-status-hidden"></div>
+                
+                <a href="index.html" class="back-link">
+                    <i class="fas fa-arrow-left"></i>
+                    ブログ生成ページに戻る
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const apiForm = document.getElementById('api-settings-form');
+            const apiKeyInput = document.getElementById('openai-api-key');
+            const modelSelect = document.getElementById('openai-model');
+            const toggleButton = document.getElementById('toggle-api-key');
+            const testApiButton = document.getElementById('test-api');
+            const apiStatus = document.getElementById('api-status');
+            
+            // 保存されている設定を読み込む
+            const savedApiKey = localStorage.getItem('openai_api_key');
+            const savedModel = localStorage.getItem('openai_model') || 'gpt-4o';
+            
+            if (savedApiKey) {
+                apiKeyInput.value = savedApiKey;
+            }
+            
+            modelSelect.value = savedModel;
+            
+            // APIキーの表示/非表示を切り替える
+            toggleButton.addEventListener('click', function() {
+                const type = apiKeyInput.getAttribute('type');
+                apiKeyInput.setAttribute('type', type === 'password' ? 'text' : 'password');
+                toggleButton.innerHTML = type === 'password' ? 
+                    '<i class="fas fa-eye-slash"></i>' : 
+                    '<i class="fas fa-eye"></i>';
+            });
+            
+            // 設定を保存する
+            apiForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const apiKey = apiKeyInput.value.trim();
+                const model = modelSelect.value;
+                
+                if (apiKey) {
+                    localStorage.setItem('openai_api_key', apiKey);
+                    localStorage.setItem('openai_model', model);
+                    
+                    showStatus('設定を保存しました。ブログ生成ページでOpenAI APIが使用できます。', 'success');
+                } else {
+                    showStatus('APIキーを入力してください。', 'error');
+                }
+            });
+            
+            // API接続テスト
+            testApiButton.addEventListener('click', async function() {
+                const apiKey = apiKeyInput.value.trim();
+                
+                if (!apiKey) {
+                    showStatus('APIキーを入力してください。', 'error');
+                    return;
+                }
+                
+                showStatus('APIに接続中...', 'info');
+                
+                try {
+                    const response = await fetch('https://api.openai.com/v1/models', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${apiKey}`
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        showStatus('API接続テスト成功！APIキーは有効です。', 'success');
+                    } else {
+                        const errorData = await response.json();
+                        showStatus(`API接続エラー: ${errorData.error?.message || '不明なエラー'}`, 'error');
+                    }
+                } catch (error) {
+                    showStatus(`API接続エラー: ${error.message}`, 'error');
+                }
+            });
+            
+            function showStatus(message, type) {
+                apiStatus.className = `status-indicator status-${type}`;
+                apiStatus.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'info' ? 'info-circle' : 'exclamation-circle'}"></i> ${message}`;
+                apiStatus.classList.remove('api-status-hidden');
+            }
+        });
+    </script>
+</body>
+</html>

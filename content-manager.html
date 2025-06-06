@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コンテンツ管理 - スタジオQ</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="blog-generator.css">
+    <script defer src="content-manager.js"></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>スタジオQ</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">新規記事生成</a></li>
+                <li><a href="content-manager.html">記事管理</a></li>
+                <li><a href="archive.html">履歴</a></li>
+                <li><a href="api-settings.html">API 設定</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="content-manager-main">
+        <div class="container">
+            <h2>記事メタデータ・画像管理</h2>
+            <section>
+                <h3>記事一覧・メタデータ編集</h3>
+                <div id="column-toggle-controls" style="margin-bottom:1em;"></div>
+<div id="article-metadata-list"></div>
+            </section>
+            <section>
+                <h3>画像管理</h3>
+                <div id="image-list"></div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>
